@@ -57,7 +57,10 @@ const App: Component = () => {
                             <div>{unicorn.hobbies}</div>
                             <div>{unicorn.capacities}</div>
                             <div class="card-actions">
-                                <button class="btn btn-primary">Buy Now</button>
+                                <button class="btn btn-primary"><span class="material-icons">favorite</span></button>
+                                <button class="btn btn-primary"><span class="material-icons">edit</span></button>
+                                <button class="btn btn-primary"><span class="material-icons">visibility</span></button>
+                                <button class="btn btn-warning"><span class="material-icons">delete</span></button>
                             </div>
                         </div>
                     </div>
