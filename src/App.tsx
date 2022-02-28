@@ -1,4 +1,5 @@
 import type {Component} from 'solid-js';
+import {createSignal} from "solid-js";
 
 import styles from './App.module.css';
 
@@ -22,6 +23,21 @@ const unicorns: Unicorn[] = await fetch('https://raw.githubusercontent.com/ben-b
 
 
 const App: Component = () => {
+
+    const [getCart, setCart] = createSignal<Unicorn[]>([]);
+
+    const clearCart = () => setCart([]);
+    const addToCart = (unicorn: Unicorn) => setCart([...getCart(), unicorn]);
+    const removeFromCart = (unicorn: Unicorn) => setCart([...getCart().filter(u => u.id !== unicorn.id)]);
+    const toggleToCart = (unicorn: Unicorn) => {
+        const isInCart: boolean = getCart().some(u => u.id === unicorn.id);
+        if (isInCart) {
+            removeFromCart(unicorn);
+        } else {
+            addToCart(unicorn);
+        }
+    }
+
     return (
         <div class={styles.App}>
 
@@ -37,14 +53,15 @@ const App: Component = () => {
                     </div>
                     <div class="flex-none">
                         <button class="btn btn-square btn-ghost">
-                            <span class="material-icons">more_horiz</span>
+                            <span class="material-icons">shopping_basket</span>
+                            <span>{getCart().length}</span>
                         </button>
                     </div>
                 </div>
             </header>
 
             <div class="drawer w-full rounded" style="height: calc(100vh - 64px);">
-                <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+                <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                 <div class="drawer-content">
 
                     {/*Page content here*/}
@@ -62,10 +79,15 @@ const App: Component = () => {
                                     <div>{unicorn.hobbies}</div>
                                     <div>{unicorn.capacities}</div>
                                     <div class="card-actions">
-                                        <button class="btn btn-primary"><span class="material-icons">favorite</span></button>
-                                        <button class="btn btn-primary"><span class="material-icons">edit</span></button>
-                                        <button class="btn btn-primary"><span class="material-icons">visibility</span></button>
-                                        <button class="btn btn-warning"><span class="material-icons">delete</span></button>
+                                        <button class="btn btn-primary" onclick={[toggleToCart, unicorn]}>
+                                            <span class="material-icons">favorite</span>
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            <span class="material-icons">edit</span>
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            <span class="material-icons">visibility</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -74,8 +96,8 @@ const App: Component = () => {
 
                     <footer class="items-center p-4 footer bg-neutral text-neutral-content">
                         <div class="items-center grid-flow-col">
-                            <img style="height: 36px" src="http://tech-homies.io/tech-homies-logo.631f7001.png" />
-                            <p>Copyright © { new Date().getFullYear() } - All right reserved</p>
+                            <img style="height: 36px" src="http://tech-homies.io/tech-homies-logo.631f7001.png"/>
+                            <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
                         </div>
                         <div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
                             <span class="material-icons">school</span>
