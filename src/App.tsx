@@ -5,14 +5,16 @@ import {Header} from "./layout/Header";
 import {Footer} from "./layout/Footer";
 import {Sidebar} from "./layout/Sidenav";
 import {UnicornsList} from "./pages/unicorns-list/UnicornsList";
+import {setState, state} from "./store/store";
 
-const unicorns: Unicorn[] = await fetch('https://raw.githubusercontent.com/ben-barbier/unicorn-back-data/master/unicorns.json')
+fetch('https://raw.githubusercontent.com/ben-barbier/unicorn-back-data/master/unicorns.json')
     .then(res => res.json())
     .then((unicorns: Unicorn[]) => unicorns.map(unicorn => {
         const photo: string = unicorn.photo.split('/').pop() ?? '';
-        const photoUrl = photo ? `https://raw.githubusercontent.com/ben-barbier/unicorn-back-nestjs/main/assets/photos/${photo}` : '';
+        const photoUrl = `https://raw.githubusercontent.com/ben-barbier/unicorn-back-nestjs/main/assets/photos/${photo}`;
         return {...unicorn, photo: photoUrl};
-    }));
+    }))
+    .then((unicorns: Unicorn[]) => setState('unicorns', unicorns));
 
 const App: Component = () => {
     return (
@@ -22,7 +24,7 @@ const App: Component = () => {
                 <input id="my-drawer" type="checkbox" class="drawer-toggle"/>
                 <div class="drawer-content">
                     {/*Page content here*/}
-                    <UnicornsList unicorns={unicorns}/>
+                    <UnicornsList unicorns={state.unicorns as Unicorn[]}/>
                     <Footer/>
                 </div>
                 <div class="drawer-side">

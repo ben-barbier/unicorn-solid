@@ -1,4 +1,4 @@
-import {Component} from "solid-js";
+import {Component, For, Show} from "solid-js";
 import {Unicorn} from "../../models/unicorn.model";
 import {isInCart, toggleToCart} from "../../store/cart";
 
@@ -12,14 +12,19 @@ export const UnicornCard: Component<{ unicorn: Unicorn }> = (props) => {
                 <h2 class="card-title">{props.unicorn.name}</h2>
                 <div>{props.unicorn.id}</div>
                 <div>{props.unicorn.birthyear}</div>
+                <Show when={props.unicorn.birthyear > new Date().getFullYear() - 5}>(🐣)</Show>
                 <div>{props.unicorn.weight}</div>
-                <div>{props.unicorn.hobbies}</div>
-                <div>{props.unicorn.capacities}</div>
+                <For each={props.unicorn.hobbies}>
+                    {(hobby) => <div>{hobby}</div>}
+                </For>
+                <For each={props.unicorn.capacities}>
+                    {(capacity) => <div>{capacity}</div>}
+                </For>
                 <div class="card-actions">
                     <button type="button"
                             class="btn btn-primary"
                             onclick={[toggleToCart, props.unicorn]}
-                            style={{ 'background-color' : isInCart(props.unicorn) ? '#ff4081' : null }}>
+                            style={{'background-color': isInCart(props.unicorn) ? '#ff4081' : null}}>
                         <span class="material-icons">favorite</span>
                     </button>
                     <button type="button"
