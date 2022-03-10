@@ -6,6 +6,7 @@ import {Footer} from "./layout/Footer";
 import {Sidebar} from "./layout/Sidenav";
 import {UnicornsList} from "./pages/unicorns-list/UnicornsList";
 import {setState, state} from "./store/store";
+import {Capacity} from "./models/capacity.model";
 
 fetch('https://raw.githubusercontent.com/ben-barbier/unicorn-back-data/master/unicorns.json')
     .then(res => res.json())
@@ -15,6 +16,10 @@ fetch('https://raw.githubusercontent.com/ben-barbier/unicorn-back-data/master/un
         return {...unicorn, photo: photoUrl};
     }))
     .then((unicorns: Unicorn[]) => setState('unicorns', unicorns));
+
+fetch('https://raw.githubusercontent.com/ben-barbier/unicorn-back-data/master/capacities.json')
+    .then(res => res.json())
+    .then((capacities: Capacity[]) => setState('capacities', capacities));
 
 const App: Component = () => {
     return (
